@@ -7,6 +7,10 @@ dotenv.config();
 
 const app = express();
 
+app.get("/", (req: express.Request, res: express.Response) => {
+  res.send("Todo backend API");
+});
+
 app.use(express.json());
 
 app.use("/todos", todoRoute);
