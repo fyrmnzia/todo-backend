@@ -12,4 +12,17 @@ const pool = new Pool({ connectionString });
 const adapter = new PrismaNeon(pool);
 const prisma = new PrismaClient({ adapter });
 
+async function connectDb() {
+  try {
+    await prisma.$connect();
+    console.log("Connected to database");
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+connectDb();
+
 export default prisma;

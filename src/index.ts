@@ -1,20 +1,7 @@
-import express from "express";
-import dotenv from "dotenv";
+import app from "./app";
 
-import todoRoutes from "./routes/todo.route";
+const PORT = process.env.PORT || 4000;
 
-dotenv.config();
-
-const app = express();
-app.use(express.json());
-
-app.use("/todos", todoRoutes);
-
-app.get("/", (req, res) => {
-  res.send("working");
-});
-
-const port = process.env.PORT;
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Listening on http://localhost:${PORT}`);
 });
