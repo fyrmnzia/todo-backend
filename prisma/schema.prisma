@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  todos     Todo[]
+}
+
+model Todo {
+  id       Int       @id @default(autoincrement())
+  title    String
+  content  String
+  userId   Int
+  user     User      @relation(fields: [userId], references: [id])
+  todoTags TodoTag[] // Connect to TodoTag model for many-to-many relationship
+}
+
+model Tag {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  todoTags TodoTag[] // Connect to TodoTag model for many-to-many relationship
+}
+
+model TodoTag {
+  todo   Todo @relation(fields: [todoId], references: [id])
+  todoId Int
+  tag    Tag  @relation(fields: [tagId], references: [id])
+  tagId  Int
+
+  @@id([todoId, tagId]) // Composite primary key to ensure uniqueness of each (todo, tag) pair
+}
